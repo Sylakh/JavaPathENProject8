@@ -1,7 +1,10 @@
 package com.openclassrooms.tourguide.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.tourguide.user.User;
@@ -15,6 +18,9 @@ import rewardCentral.RewardCentral;
 
 @Service
 public class RewardsService {
+
+	private static final Logger logger = LogManager.getLogger("rewardsService");
+
 	private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
 	// proximity in miles
@@ -40,16 +46,26 @@ public class RewardsService {
 	public void calculateRewards(User user) {
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
+		List<UserReward> userRewardsToBeAdded = new ArrayList<>();
 
 		for (VisitedLocation visitedLocation : userLocations) {
+
 			for (Attraction attraction : attractions) {
 				if (user.getUserRewards().stream()
 						.filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
 					if (nearAttraction(visitedLocation, attraction)) {
-						user.addUserReward(
-								new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
+						userRewardsToBeAdded.add(
+								new UserReward(visitedLocation, attraction, 1 /** getRewardPoints(attraction, user) */
+								));
 					}
 				}
+			}
+		}
+		for (UserReward userReward : userRewardsToBeAdded) {
+			if (user.getUserRewards().stream()
+					.filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName))
+					.count() == 0) {
+				user.getUserRewards().add(userReward);
 			}
 		}
 	}
