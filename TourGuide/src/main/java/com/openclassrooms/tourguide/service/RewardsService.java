@@ -1,6 +1,5 @@
 package com.openclassrooms.tourguide.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +45,6 @@ public class RewardsService {
 	public void calculateRewards(User user) {
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
-		List<UserReward> userRewardsToBeAdded = new ArrayList<>();
 
 		for (VisitedLocation visitedLocation : userLocations) {
 
@@ -54,20 +52,18 @@ public class RewardsService {
 				if (user.getUserRewards().stream()
 						.filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
 					if (nearAttraction(visitedLocation, attraction)) {
-						userRewardsToBeAdded.add(
-								new UserReward(visitedLocation, attraction, 1 /** getRewardPoints(attraction, user) */
-								));
+						UserReward userReward = new UserReward(visitedLocation, attraction,
+								getRewardPoints(attraction, user));
+						if (user.getUserRewards().stream()
+								.filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName))
+								.count() == 0) {
+							user.getUserRewards().add(userReward);
+						}
 					}
 				}
 			}
 		}
-		for (UserReward userReward : userRewardsToBeAdded) {
-			if (user.getUserRewards().stream()
-					.filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName))
-					.count() == 0) {
-				user.getUserRewards().add(userReward);
-			}
-		}
+
 	}
 
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
