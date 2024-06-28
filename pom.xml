@@ -46,14 +46,14 @@
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+<!--
 		<dependency>
 			<groupId>gpsUtil</groupId>
 			<artifactId>gpsUtil</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 <!-- C:\Users\sylak\git\JavaPathENProject8\TourGuide>mvn install:install-file -Dfile=C:\Users\sylak\git\JavaPathENProject8\TourGuide\libs\gpsUtil.jar -DgroupId=g
-psUtil -DartifactId=gpsUtil -Dversion=1.0.0 -Dpackaging=jar  -->
+psUtil -DartifactId=gpsUtil -Dversion=1.0.0 -Dpackaging=jar  
 		<dependency>
 			<groupId>tripPricer</groupId>
 			<artifactId>tripPricer</artifactId>
@@ -65,6 +65,27 @@ psUtil -DartifactId=gpsUtil -Dversion=1.0.0 -Dpackaging=jar  -->
 			<artifactId>rewardCentral</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		 <dependency>
+        <groupId>gpsUtil</groupId>
+        <artifactId>gpsUtil</artifactId>
+        <version>1.0.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/libs/gpsUtil-1.0.0.jar</systemPath>
+    </dependency>  -->
+    <dependency>
+        <groupId>tripPricer</groupId>
+        <artifactId>tripPricer</artifactId>
+        <version>1.0.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/libs/tripPricer-1.0.0.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>rewardCentral</groupId>
+        <artifactId>rewardCentral</artifactId>
+        <version>1.0.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/libs/rewardCentral-1.0.0.jar</systemPath>
+    </dependency>
 	</dependencies>
 
 	<build>
