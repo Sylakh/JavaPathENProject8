@@ -49,18 +49,6 @@ public class RewardsService {
 		proximityBuffer = defaultProximityBuffer;
 	}
 
-	public void calculateRewards_old(User user) {
-		List<VisitedLocation> userLocations = user.getVisitedLocations();
-		List<Attraction> attractions = gpsUtil.getAttractions();
-
-		for (VisitedLocation visitedLocation : userLocations) {
-
-			for (Attraction attraction : attractions) {
-				calculate(user, attraction, visitedLocation);
-			}
-		}
-	}
-
 	public void calculateRewards(User user) {
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
@@ -91,23 +79,6 @@ public class RewardsService {
 			}
 			return null;
 		}, executor); // Use executor
-
-	}
-
-	private void calculate_old(User user, Attraction attraction, VisitedLocation visitedLocation) {
-
-		if (user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName))
-
-				.count() == 0) {
-			if (nearAttraction(visitedLocation, attraction)) {
-				UserReward userReward = new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user));
-				if (user.getUserRewards().stream()
-						.filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName))
-						.count() == 0) {
-					user.getUserRewards().add(userReward);
-				}
-			}
-		}
 
 	}
 

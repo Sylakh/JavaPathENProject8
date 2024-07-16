@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -168,20 +167,21 @@ public class TourGuideService {
 	}
 
 	public void trackAllUserLocation(List<User> allUsers) {
-		// allUsers.parallelStream().forEach(user -> trackUserLocation(user));
+		allUsers.parallelStream().forEach(user -> trackUserLocation(user));
 
-		// Pour chaque utilisateur on trace de manière asynchrone sa position. Chaque
-		// opération renvoie un objet de type CompletableFuture.
-		List<CompletableFuture<Void>> futures = allUsers.stream()
-				.map(user -> CompletableFuture.runAsync(() -> trackUserLocation(user))).collect(Collectors.toList());
-
-		// On utilise allOf() pour attendre que toutes les opérations de tracking soient
-		// terminées.
-		CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-
-		// Une fois que les CompletableFutures sont terminés .
-		allOf.join();
-
+		/**
+		 * Autre maniere de faire: // Pour chaque utilisateur on trace de manière
+		 * asynchrone sa position. Chaque // opération renvoie un objet de type
+		 * CompletableFuture. List<CompletableFuture<Void>> futures = allUsers.stream()
+		 * .map(user -> CompletableFuture.runAsync(() ->
+		 * trackUserLocation(user))).collect(Collectors.toList());
+		 * 
+		 * // On utilise allOf() pour attendre que toutes les opérations de tracking
+		 * soient // terminées. CompletableFuture<Void> allOf =
+		 * CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		 * 
+		 * // Une fois que les CompletableFutures sont terminés . allOf.join();
+		 */
 	}
 
 }
